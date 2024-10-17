@@ -1,5 +1,6 @@
 package com.wileyedge.fullstackschool.dao;
 
+import com.wileyedge.fullstackschool.dao.mappers.StudentMapper;
 import com.wileyedge.fullstackschool.dao.mappers.TeacherMapper;
 import com.wileyedge.fullstackschool.model.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,16 @@ public class TeacherDaoImpl implements TeacherDao {
     public Teacher createNewTeacher(Teacher teacher) {
         //YOUR CODE STARTS HERE
 
-        return null;
+        final String INSERT_TEACHER = "INERT INTO teacher(firstName, lastName, dept) VALUES(?, ?, ?)";
+        jdbcTemplate.update(INSERT_TEACHER,
+                teacher.getTeacherFName(),
+                teacher.getTeacherFName(),
+                teacher.getDept());
+
+        int newId = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
+        teacher.setTeacherId(newId);
+
+        return teacher;
 
         //YOUR CODE ENDS HERE
     }
@@ -33,8 +43,8 @@ public class TeacherDaoImpl implements TeacherDao {
     public List<Teacher> getAllTeachers() {
         //YOUR CODE STARTS HERE
 
-
-        return null;
+        final String SELECT_ALL_TEACHER = "SELECT * FROM teacher";
+        return jdbcTemplate.query(SELECT_ALL_TEACHER, new TeacherMapper());
 
         //YOUR CODE ENDS HERE
     }
@@ -43,8 +53,8 @@ public class TeacherDaoImpl implements TeacherDao {
     public Teacher findTeacherById(int id) {
         //YOUR CODE STARTS HERE
 
-
-        return null;
+        final String SELECT_TEACHER_BY_ID = "SELECT * FROM teacher WHERE id = ?";
+        return jdbcTemplate.queryForObject(SELECT_TEACHER_BY_ID, new TeacherMapper(), id);
 
         //YOUR CODE ENDS HERE
     }
@@ -53,7 +63,12 @@ public class TeacherDaoImpl implements TeacherDao {
     public void updateTeacher(Teacher t) {
         //YOUR CODE STARTS HERE
 
-
+        final String UPDATE_TEACHER = "UPDATE teacher SET firstName = ?, lastName = ?, dept = ? WHERE id = ?";
+        jdbcTemplate.update(UPDATE_TEACHER,
+                t.getTeacherFName(),
+                t.getTeacherFName(),
+                t.getDept(),
+                t.getTeacherId());
 
         //YOUR CODE ENDS HERE
     }
@@ -62,6 +77,11 @@ public class TeacherDaoImpl implements TeacherDao {
     public void deleteTeacher(int id) {
         //YOUR CODE STARTS HERE
 
+        final String DELETE_TEACHER_FROM_COURSE = "DELETE FROM course WHERE teacherId = ?";
+        jdbcTemplate.update(DELETE_TEACHER_FROM_COURSE, id);
+
+        final String DELETE_TEACHER_BY_ID = "DELETE FROM teacher WHERE id = ?";
+        jdbcTemplate.update(DELETE_TEACHER_BY_ID, id);
 
         //YOUR CODE ENDS HERE
     }

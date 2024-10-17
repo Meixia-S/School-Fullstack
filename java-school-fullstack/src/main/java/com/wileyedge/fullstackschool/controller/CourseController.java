@@ -3,6 +3,8 @@ package com.wileyedge.fullstackschool.controller;
 import com.wileyedge.fullstackschool.model.Course;
 import com.wileyedge.fullstackschool.service.CourseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -18,7 +20,7 @@ public class CourseController {
     public List<Course> getAllCourses() {
         //YOUR CODE STARTS HERE
 
-        return null;
+        return courseService.getAllCourses();
 
         //YOUR CODE ENDS HERE
     }
@@ -27,7 +29,12 @@ public class CourseController {
     public Course getCourseById(@PathVariable int id) {
         //YOUR CODE STARTS HERE
 
-        return null;
+        try {
+            return courseService.getCourseById(id);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Id not in database");
+        }
 
         //YOUR CODE ENDS HERE
     }
@@ -36,7 +43,8 @@ public class CourseController {
     public Course addCourse(@RequestBody Course course) {
         //YOUR CODE STARTS HERE
 
-        return null;
+        courseService.addNewCourse(course);
+        return course;
 
         //YOUR CODE ENDS HERE
     }
@@ -45,7 +53,12 @@ public class CourseController {
     public Course updateCourse(@PathVariable int id, @RequestBody Course course) {
         //YOUR CODE STARTS HERE
 
-        return null;
+        try {
+            return courseService.updateCourseData(id, course);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Id not in database");
+        }
 
         //YOUR CODE ENDS HERE
     }
@@ -54,7 +67,11 @@ public class CourseController {
     public void deleteCourse(@PathVariable int id) {
         //YOUR CODE STARTS HERE
 
-
+        try {
+            courseService.deleteCourseById(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Id not in database");
+        }
 
         //YOUR CODE ENDS HERE
     }

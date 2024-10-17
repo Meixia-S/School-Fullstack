@@ -18,7 +18,7 @@ public class TeacherController {
     public List<Teacher> getAllTeachers() {
         //YOUR CODE STARTS HERE
 
-        return null;
+        return teacherServiceImpl.getAllTeachers();
 
         //YOUR CODE ENDS HERE
     }
@@ -27,7 +27,11 @@ public class TeacherController {
     public Teacher getTeacherById(@PathVariable int id) {
         //YOUR CODE STARTS HERE
 
-        return null;
+        try {
+            return teacherServiceImpl.getTeacherById(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Id not in database");
+        }
 
         //YOUR CODE ENDS HERE
     }
@@ -36,7 +40,7 @@ public class TeacherController {
     public Teacher addTeacher(@RequestBody Teacher teacher) {
         //YOUR CODE STARTS HERE
 
-        return null;
+        return teacherServiceImpl.addNewTeacher(teacher);
 
         //YOUR CODE ENDS HERE
     }
@@ -45,7 +49,12 @@ public class TeacherController {
     public Teacher updateTeacher(@PathVariable int id, @RequestBody Teacher teacher) {
         //YOUR CODE STARTS HERE
 
-        return null;
+        try {
+            teacherServiceImpl.updateTeacherData(id, teacher);
+            return teacher;
+        } catch (Exception e) {
+            throw new RuntimeException("Id not in database");
+        }
 
         //YOUR CODE ENDS HERE
     }
@@ -54,7 +63,11 @@ public class TeacherController {
     public void deleteTeacher(@PathVariable int id) {
         //YOUR CODE STARTS HERE
 
-
+        try {
+            teacherServiceImpl.deleteTeacherById(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Id not in database");
+        }
 
         //YOUR CODE ENDS HERE
     }

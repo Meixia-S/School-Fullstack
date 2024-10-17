@@ -13,6 +13,7 @@ public class TeacherServiceImpl implements TeacherServiceInterface {
     @Autowired
     TeacherDao teacherDao;
 
+    @Autowired
     public TeacherServiceImpl(TeacherDao teacherDao) {
         this.teacherDao = teacherDao;
     }
@@ -23,7 +24,7 @@ public class TeacherServiceImpl implements TeacherServiceInterface {
     public List<Teacher> getAllTeachers() {
         //YOUR CODE STARTS HERE
 
-        return null;
+        return teacherDao.getAllTeachers();
 
         //YOUR CODE ENDS HERE
     }
@@ -31,7 +32,7 @@ public class TeacherServiceImpl implements TeacherServiceInterface {
     public Teacher getTeacherById(int id) {
         //YOUR CODE STARTS HERE
 
-        return null;
+        return teacherDao.findTeacherById(id);
 
         //YOUR CODE ENDS HERE
     }
@@ -39,7 +40,7 @@ public class TeacherServiceImpl implements TeacherServiceInterface {
     public Teacher addNewTeacher(Teacher teacher) {
         //YOUR CODE STARTS HERE
 
-        return null;
+        return teacherDao.createNewTeacher(teacher);
 
         //YOUR CODE ENDS HERE
     }
@@ -47,7 +48,13 @@ public class TeacherServiceImpl implements TeacherServiceInterface {
     public Teacher updateTeacherData(int id, Teacher teacher) {
         //YOUR CODE STARTS HERE
 
-        return null;
+        try {
+            teacherDao.updateTeacher(teacher);
+            return teacherDao.findTeacherById(id);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Id not in database");
+        }
 
         //YOUR CODE ENDS HERE
     }
@@ -55,7 +62,12 @@ public class TeacherServiceImpl implements TeacherServiceInterface {
     public void deleteTeacherById(int id) {
         //YOUR CODE STARTS HERE
 
+        try {
+            teacherDao.deleteTeacher(id);
 
+        } catch (Exception e) {
+            throw new RuntimeException("Id not in database");
+        }
 
         //YOUR CODE ENDS HERE
     }

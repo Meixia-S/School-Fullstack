@@ -10,6 +10,7 @@ import java.util.List;
 @RequestMapping("/student")
 @CrossOrigin
 public class StudentController {
+
     @Autowired
     StudentServiceImpl studentServiceImpl;
 
@@ -17,7 +18,7 @@ public class StudentController {
     public List<Student> getAllStudents() {
         //YOUR CODE STARTS HERE
 
-        return null;
+        return studentServiceImpl.getAllStudents();
 
         //YOUR CODE ENDS HERE
     }
@@ -26,7 +27,8 @@ public class StudentController {
     public Student addStudent(@RequestBody Student student) {
         //YOUR CODE STARTS HERE
 
-        return null;
+        studentServiceImpl.addNewStudent(student);
+        return student;
 
         //YOUR CODE ENDS HERE
     }
@@ -35,7 +37,11 @@ public class StudentController {
     public Student getStudentById(@PathVariable int id) {
         //YOUR CODE STARTS HERE
 
-        return null;
+        try {
+            return studentServiceImpl.getStudentById(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Id not in database");
+        }
 
         //YOUR CODE ENDS HERE
     }
@@ -44,7 +50,12 @@ public class StudentController {
     public Student updateStudent(@PathVariable int id, @RequestBody Student student) {
         //YOUR CODE STARTS HERE
 
-        return null;
+        try {
+            return studentServiceImpl.updateStudentData(id, student);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Id not in database");
+        }
 
         //YOUR CODE ENDS HERE
     }
@@ -53,7 +64,11 @@ public class StudentController {
     public void deleteStudent(@PathVariable int id) {
         //YOUR CODE STARTS HERE
 
-
+        try {
+            studentServiceImpl.deleteStudentById(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Id not in database");
+        }
 
         //YOUR CODE ENDS HERE
     }
@@ -62,7 +77,11 @@ public class StudentController {
     public void deleteStudentFromCourse(@PathVariable int studentId, @PathVariable int courseId) {
         //YOUR CODE STARTS HERE
 
-
+        try {
+            studentServiceImpl.deleteStudentFromCourse(studentId, courseId);
+        } catch (Exception e) {
+            throw new RuntimeException("StudentId or CourseId not in database");
+        }
 
         //YOUR CODE ENDS HERE
     }
@@ -71,7 +90,11 @@ public class StudentController {
     public void addStudentToCourse(@PathVariable int studentId, @PathVariable int courseId) {
         //YOUR CODE STARTS HERE
 
-
+        try {
+            studentServiceImpl.addStudentToCourse(studentId, courseId);
+        } catch (Exception e) {
+            throw new RuntimeException("StudentId or CourseId not in database");
+        }
 
         //YOUR CODE ENDS HERE
     }
