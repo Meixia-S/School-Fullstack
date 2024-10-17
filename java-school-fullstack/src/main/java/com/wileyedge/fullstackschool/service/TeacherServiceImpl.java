@@ -40,6 +40,12 @@ public class TeacherServiceImpl implements TeacherServiceInterface {
     public Teacher addNewTeacher(Teacher teacher) {
         //YOUR CODE STARTS HERE
 
+        if (teacher.getTeacherFName().isEmpty() || teacher.getTeacherLName().isEmpty()) {
+            teacher.setTeacherFName("First Name blank, teacher NOT added");
+            teacher.setTeacherLName("Last Name blank, teacher NOT added");
+            return teacher;
+        }
+
         return teacherDao.createNewTeacher(teacher);
 
         //YOUR CODE ENDS HERE
@@ -48,12 +54,14 @@ public class TeacherServiceImpl implements TeacherServiceInterface {
     public Teacher updateTeacherData(int id, Teacher teacher) {
         //YOUR CODE STARTS HERE
 
-        try {
+        if (teacher.getTeacherId() == id) {
             teacherDao.updateTeacher(teacher);
             return teacherDao.findTeacherById(id);
 
-        } catch (Exception e) {
-            throw new RuntimeException("Id not in database");
+        } else {
+            teacher.setTeacherFName("IDs do not match, teacher not updated");
+            teacher.setTeacherLName("IDs do not match, teacher not updated");
+            return teacher;
         }
 
         //YOUR CODE ENDS HERE
@@ -62,12 +70,7 @@ public class TeacherServiceImpl implements TeacherServiceInterface {
     public void deleteTeacherById(int id) {
         //YOUR CODE STARTS HERE
 
-        try {
-            teacherDao.deleteTeacher(id);
-
-        } catch (Exception e) {
-            throw new RuntimeException("Id not in database");
-        }
+        teacherDao.deleteTeacher(id);
 
         //YOUR CODE ENDS HERE
     }

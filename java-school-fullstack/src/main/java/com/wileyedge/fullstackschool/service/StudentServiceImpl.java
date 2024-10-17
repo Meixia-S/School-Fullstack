@@ -1,9 +1,14 @@
 package com.wileyedge.fullstackschool.service;
 
+import com.wileyedge.fullstackschool.dao.CourseDao;
+import com.wileyedge.fullstackschool.dao.CourseDaoImpl;
 import com.wileyedge.fullstackschool.dao.StudentDao;
 import com.wileyedge.fullstackschool.model.Course;
 import com.wileyedge.fullstackschool.model.Student;
+
+import org.hibernate.engine.transaction.jta.platform.internal.SynchronizationRegistryBasedSynchronizationStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -35,8 +40,11 @@ public class StudentServiceImpl implements StudentServiceInterface {
         try {
             return studentDao.findStudentById(id);
 
-        } catch (Exception e) {
-            throw new RuntimeException("Id not in database");
+        } catch (DataAccessException e) {
+            Student student = studentDao.findStudentById(id);
+            student.setStudentFirstName("Student Not Found");
+            student.setStudentLastName("Student Not Found");
+            return student;
         }
 
         //YOUR CODE ENDS HERE
@@ -44,6 +52,12 @@ public class StudentServiceImpl implements StudentServiceInterface {
 
     public Student addNewStudent(Student student) {
         //YOUR CODE STARTS HERE
+
+        if (student.getStudentFirstName().isEmpty() || student.getStudentLastName().isEmpty()) {
+            student.setStudentFirstName("First Name blank, student NOT added");
+            student.setStudentLastName("Last Name blank, student NOT added");
+            return student;
+        }
 
         return studentDao.createNewStudent(student);
 
@@ -53,13 +67,15 @@ public class StudentServiceImpl implements StudentServiceInterface {
     public Student updateStudentData(int id, Student student) {
         //YOUR CODE STARTS HERE
 
-        try {
+        if (student.getStudentId() == id) {
             studentDao.updateStudent(student);
-            return studentDao.findStudentById(id);
 
-        } catch (Exception e) {
-            throw new RuntimeException("Id not in database");
+        } else {
+            student.setStudentFirstName("IDs do not match, student not updated");
+            student.setStudentLastName("IDs do not match, student not updated");
         }
+
+        return student;
 
         //YOUR CODE ENDS HERE
     }
@@ -75,14 +91,21 @@ public class StudentServiceImpl implements StudentServiceInterface {
     public void deleteStudentFromCourse(int studentId, int courseId) {
         //YOUR CODE STARTS HERE
 
-        studentDao.deleteStudentFromCourse(studentId, courseId);
-        studentDao.deleteStudent(studentId);
+        Student student = studentDao.findStudentById(studentId);
+        if (student.getStudentFirstName().equals("Student Not Found")){
+            System.out.println("Student not found");
+        } else {
+            studentDao.deleteStudentFromCourse(studentId, courseId);
+            studentDao.deleteStudent(studentId);
+            System.out.println("Student: " + studentId + " deleted from course: " + courseId);
+        }
 
         //YOUR CODE ENDS HERE
     }
 
     public void addStudentToCourse(int studentId, int courseId) {
         //YOUR CODE STARTS HERE
+
 
         studentDao.addStudentToCourse(studentId, courseId);
 

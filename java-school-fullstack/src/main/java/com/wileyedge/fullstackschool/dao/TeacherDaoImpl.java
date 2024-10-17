@@ -25,14 +25,20 @@ public class TeacherDaoImpl implements TeacherDao {
     public Teacher createNewTeacher(Teacher teacher) {
         //YOUR CODE STARTS HERE
 
-        final String INSERT_TEACHER = "INERT INTO teacher(firstName, lastName, dept) VALUES(?, ?, ?)";
-        jdbcTemplate.update(INSERT_TEACHER,
-                teacher.getTeacherFName(),
-                teacher.getTeacherFName(),
-                teacher.getDept());
+        final String sql = "INSERT INTO teacher(tFName, tLName, dept) VALUES(?, ?, ?)";
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 
-        int newId = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
-        teacher.setTeacherId(newId);
+        jdbcTemplate.update((Connection conn) -> {
+            PreparedStatement statement = conn.prepareStatement(
+                    sql,
+                    Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, teacher.getTeacherFName());
+            statement.setString(2, teacher.getTeacherLName());
+            statement.setString(3, teacher.getDept());
+            return statement;
+        }, keyHolder);
+
+        teacher.setTeacherId(keyHolder.getKey().intValue());
 
         return teacher;
 
@@ -53,7 +59,7 @@ public class TeacherDaoImpl implements TeacherDao {
     public Teacher findTeacherById(int id) {
         //YOUR CODE STARTS HERE
 
-        final String SELECT_TEACHER_BY_ID = "SELECT * FROM teacher WHERE id = ?";
+        final String SELECT_TEACHER_BY_ID = "SELECT * FROM teacher WHERE tid = ?";
         return jdbcTemplate.queryForObject(SELECT_TEACHER_BY_ID, new TeacherMapper(), id);
 
         //YOUR CODE ENDS HERE
@@ -63,10 +69,11 @@ public class TeacherDaoImpl implements TeacherDao {
     public void updateTeacher(Teacher t) {
         //YOUR CODE STARTS HERE
 
-        final String UPDATE_TEACHER = "UPDATE teacher SET firstName = ?, lastName = ?, dept = ? WHERE id = ?";
+        final String UPDATE_TEACHER = "UPDATE teacher SET tFName = ?, tLName = ?, dept = ? " +
+                "WHERE tid = ?";
         jdbcTemplate.update(UPDATE_TEACHER,
                 t.getTeacherFName(),
-                t.getTeacherFName(),
+                t.getTeacherLName(),
                 t.getDept(),
                 t.getTeacherId());
 
@@ -80,7 +87,7 @@ public class TeacherDaoImpl implements TeacherDao {
         final String DELETE_TEACHER_FROM_COURSE = "DELETE FROM course WHERE teacherId = ?";
         jdbcTemplate.update(DELETE_TEACHER_FROM_COURSE, id);
 
-        final String DELETE_TEACHER_BY_ID = "DELETE FROM teacher WHERE id = ?";
+        final String DELETE_TEACHER_BY_ID = "DELETE FROM teacher WHERE tid = ?";
         jdbcTemplate.update(DELETE_TEACHER_BY_ID, id);
 
         //YOUR CODE ENDS HERE

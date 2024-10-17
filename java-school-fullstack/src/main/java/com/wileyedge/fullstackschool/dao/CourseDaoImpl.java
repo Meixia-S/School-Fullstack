@@ -24,15 +24,19 @@ public class CourseDaoImpl implements CourseDao {
     public Course createNewCourse(Course course) {
         //YOUR CODE STARTS HERE
 
-        final String INSERT_COURSE = "INSERT INTO course(courseCode, courseDesc, teacherId " +
-                "VALUES(?, ?, ?)";
+        final String sql = "INSERT INTO course(CourseCode, CourseDesc) VALUES (?, ?);";
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 
-        jdbcTemplate.update(INSERT_COURSE,
-                course.getCourseName(),
-                course.getCourseDesc(),
-                course.getTeacherId());
-        int courseId = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
-        course.setCourseId(courseId);
+        jdbcTemplate.update((Connection conn) -> {
+            PreparedStatement statement = conn.prepareStatement(
+                    sql,
+                    Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, course.getCourseName());
+            statement.setString(2, course.getCourseDesc());
+            return statement;
+        }, keyHolder);
+
+        course.setCourseId(keyHolder.getKey().intValue());
 
         return course;
 
@@ -64,8 +68,8 @@ public class CourseDaoImpl implements CourseDao {
         //YOUR CODE STARTS HERE
 
         final String UPDATE_COURSE = "UPDATE course SET " +
-                                        "courseCode = ? " +
-                                        "courseDesc = ? " +
+                                        "courseCode = ?, " +
+                                        "courseDesc = ?, " +
                                         "teacherId = ? " +
                                       "WHERE cid = ?";
         jdbcTemplate.update(UPDATE_COURSE,

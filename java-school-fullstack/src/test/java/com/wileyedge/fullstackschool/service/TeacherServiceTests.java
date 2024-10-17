@@ -82,5 +82,4 @@ public class TeacherServiceTests {
         assertEquals("First Name blank, teacher NOT added", teacher.getTeacherFName());
         assertEquals("Last Name blank, teacher NOT added", teacher.getTeacherLName());
     }
-
 }

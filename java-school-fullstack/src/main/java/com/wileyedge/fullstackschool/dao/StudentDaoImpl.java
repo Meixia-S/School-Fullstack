@@ -27,13 +27,19 @@ public class StudentDaoImpl implements StudentDao {
     public Student createNewStudent(Student student) {
         //YOUR CODE STARTS HERE
 
-        final String INSERT_STUDENT = "INERT INTO student(firstName, lastName) VALUES(?, ?)";
-        jdbcTemplate.update(INSERT_STUDENT,
-                student.getStudentFirstName(),
-                student.getStudentLastName());
+        final String sql = "INSERT INTO student(fName, lName) VALUES(?, ?)";
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 
-        int newId = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
-        student.setStudentId(newId);
+        jdbcTemplate.update((Connection conn) -> {
+            PreparedStatement statement = conn.prepareStatement(
+                    sql,
+                    Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, student.getStudentFirstName());
+            statement.setString(2, student.getStudentLastName());
+            return statement;
+        }, keyHolder);
+
+        student.setStudentId(keyHolder.getKey().intValue());
 
         return student;
 
@@ -54,7 +60,7 @@ public class StudentDaoImpl implements StudentDao {
     public Student findStudentById(int id) {
         //YOUR CODE STARTS HERE
 
-        final String SELECT_STUDENT_BY_ID = "SELECT * FROM student WHERE id = ?";
+        final String SELECT_STUDENT_BY_ID = "SELECT * FROM student WHERE sid = ?";
         return jdbcTemplate.queryForObject(SELECT_STUDENT_BY_ID, new StudentMapper(), id);
 
         //YOUR CODE ENDS HERE
@@ -64,7 +70,7 @@ public class StudentDaoImpl implements StudentDao {
     public void updateStudent(Student student) {
         //YOUR CODE STARTS HERE
 
-        final String UPDATE_STUDENT = "UPDATE student SET firstName = ?, lastName = ? WHERE id = ?";
+        final String UPDATE_STUDENT = "UPDATE student SET fName = ?, lName = ? WHERE sid = ?";
         jdbcTemplate.update(UPDATE_STUDENT,
                 student.getStudentFirstName(),
                 student.getStudentLastName(),
@@ -77,7 +83,7 @@ public class StudentDaoImpl implements StudentDao {
     public void deleteStudent(int id) {
         //YOUR CODE STARTS HERE
 
-        final String DELETE_STUDENT_BY_ID = "DELETE FROM student WHERE id = ?";
+        final String DELETE_STUDENT_BY_ID = "DELETE FROM student WHERE sid = ?";
         jdbcTemplate.update(DELETE_STUDENT_BY_ID, id);
 
         //YOUR CODE ENDS HERE
