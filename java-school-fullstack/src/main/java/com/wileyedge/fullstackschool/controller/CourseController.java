@@ -29,12 +29,14 @@ public class CourseController {
     public Course getCourseById(@PathVariable int id) {
         //YOUR CODE STARTS HERE
 
-        try {
-            return courseService.getCourseById(id);
+        /**
+         *   I have removed all the try catches in the controllers as the "errors" are represented
+         *   in the data itself.
+         *
+         *   The controller will not need to catch any service layer errors/exceptions.
+         */
 
-        } catch (Exception e) {
-            throw new RuntimeException("Id not in database");
-        }
+        return courseService.getCourseById(id);
 
         //YOUR CODE ENDS HERE
     }
@@ -43,8 +45,7 @@ public class CourseController {
     public Course addCourse(@RequestBody Course course) {
         //YOUR CODE STARTS HERE
 
-        courseService.addNewCourse(course);
-        return course;
+        return courseService.addNewCourse(course);
 
         //YOUR CODE ENDS HERE
     }
@@ -53,12 +54,7 @@ public class CourseController {
     public Course updateCourse(@PathVariable int id, @RequestBody Course course) {
         //YOUR CODE STARTS HERE
 
-        try {
-            return courseService.updateCourseData(id, course);
-
-        } catch (Exception e) {
-            throw new RuntimeException("Id not in database");
-        }
+        return courseService.updateCourseData(id, course);
 
         //YOUR CODE ENDS HERE
     }
@@ -67,11 +63,7 @@ public class CourseController {
     public void deleteCourse(@PathVariable int id) {
         //YOUR CODE STARTS HERE
 
-        try {
-            courseService.deleteCourseById(id);
-        } catch (Exception e) {
-            throw new RuntimeException("Id not in database");
-        }
+        courseService.deleteCourseById(id);
 
         //YOUR CODE ENDS HERE
     }

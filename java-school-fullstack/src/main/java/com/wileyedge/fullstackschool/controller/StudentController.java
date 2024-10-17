@@ -27,8 +27,7 @@ public class StudentController {
     public Student addStudent(@RequestBody Student student) {
         //YOUR CODE STARTS HERE
 
-        studentServiceImpl.addNewStudent(student);
-        return student;
+        return studentServiceImpl.addNewStudent(student);
 
         //YOUR CODE ENDS HERE
     }
@@ -37,11 +36,7 @@ public class StudentController {
     public Student getStudentById(@PathVariable int id) {
         //YOUR CODE STARTS HERE
 
-        try {
-            return studentServiceImpl.getStudentById(id);
-        } catch (Exception e) {
-            throw new RuntimeException("Id not in database");
-        }
+        return studentServiceImpl.getStudentById(id);
 
         //YOUR CODE ENDS HERE
     }
@@ -50,12 +45,7 @@ public class StudentController {
     public Student updateStudent(@PathVariable int id, @RequestBody Student student) {
         //YOUR CODE STARTS HERE
 
-        try {
-            return studentServiceImpl.updateStudentData(id, student);
-
-        } catch (Exception e) {
-            throw new RuntimeException("Id not in database");
-        }
+        return studentServiceImpl.updateStudentData(id, student);
 
         //YOUR CODE ENDS HERE
     }
@@ -64,11 +54,7 @@ public class StudentController {
     public void deleteStudent(@PathVariable int id) {
         //YOUR CODE STARTS HERE
 
-        try {
-            studentServiceImpl.deleteStudentById(id);
-        } catch (Exception e) {
-            throw new RuntimeException("Id not in database");
-        }
+        studentServiceImpl.deleteStudentById(id);
 
         //YOUR CODE ENDS HERE
     }
@@ -77,11 +63,7 @@ public class StudentController {
     public void deleteStudentFromCourse(@PathVariable int studentId, @PathVariable int courseId) {
         //YOUR CODE STARTS HERE
 
-        try {
-            studentServiceImpl.deleteStudentFromCourse(studentId, courseId);
-        } catch (Exception e) {
-            throw new RuntimeException("StudentId or CourseId not in database");
-        }
+        studentServiceImpl.deleteStudentFromCourse(studentId, courseId);
 
         //YOUR CODE ENDS HERE
     }
@@ -90,11 +72,7 @@ public class StudentController {
     public void addStudentToCourse(@PathVariable int studentId, @PathVariable int courseId) {
         //YOUR CODE STARTS HERE
 
-        try {
-            studentServiceImpl.addStudentToCourse(studentId, courseId);
-        } catch (Exception e) {
-            throw new RuntimeException("StudentId or CourseId not in database");
-        }
+        studentServiceImpl.addStudentToCourse(studentId, courseId);
 
         //YOUR CODE ENDS HERE
     }
