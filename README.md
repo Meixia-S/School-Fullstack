@@ -269,7 +269,7 @@ All new code should be added inside these placeholders.
 
 ### Step 4: Submit Your Work
 1. Code solutions to the problem statements and run the code in the local IDE to check it as you work.
-2. Incrementally commit the changes to the repository, labeling each commit numerically (Commit1, Commit2, etc.).
+2. Incrementally commit the changes to the repository, labeling each commit numerically (Commit1, Commit2, etc).
     - The number of commits can be as high as necessary; commit as frequently as you wish.
 3. Each commit will be tested automatically against the relevant test cases. Open the repository in GitHub to view the test results.
     - A checkmark indicates that a test passed.
